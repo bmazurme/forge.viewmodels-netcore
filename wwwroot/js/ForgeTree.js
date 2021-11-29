@@ -14,10 +14,7 @@
 // MERCHANTABILITY OR FITNESS FOR A PARTICULAR USE.  AUTODESK, INC.
 // DOES NOT WARRANT THAT THE OPERATION OF THE PROGRAM WILL BE
 // UNINTERRUPTED OR ERROR FREE.
-///////////////////////////////////////////////////////////////
-
-
-
+/////////////////////////////////////////////////////////////////////
 
 $(document).ready(function () {
     prepareAppBucketTree();
@@ -77,15 +74,13 @@ function createNewBucket() {
         },
         error: function (err) {
             if (err.status == 409)
-                acket already exists - 409: Duplicated')
+                alert('Bucket already exists - 409: Duplicated')
             console.log(err);
         }
     });
 }
 
 function prepareAppBucketTree() {
-    
-
     $('#appBuckets').jstree({
         'core': {
             'themes': { "icons": true },
@@ -131,22 +126,23 @@ function prepareAppBucketTree() {
                     error: function (err) {
                         var msgButton = 'This file is not translated yet! ' +
                             '<button class="btn btn-xs btn-info" onclick="translateObject()"><span class="glyphicon glyphicon-eye-open"></span> ' +
-                        n>'
+                            'Start translation</button>'
                         $("#forgeViewer").html(msgButton);
                     }
                 });
             })
-       
-    });//}
+        }
+    });
+}
 
 function autodeskCustomMenu(autodeskNode) {
     var items;
-    console.log('---===---');
+
     switch (autodeskNode.type) {
         case "bucket":
             items = {
                 uploadFile: {
-                    label: "=-Upload file-=",
+                    label: "Upload file",
                     action: function () {
                         uploadFile();
                     },
@@ -163,6 +159,14 @@ function autodeskCustomMenu(autodeskNode) {
                         translateObject(treeNode);
                     },
                     icon: 'glyphicon glyphicon-eye-open'
+                },
+                downloadFile: {
+                    label: "Download",
+                    action: function () {
+                        var treeNode = $('#appBuckets').jstree(true).get_selected(true)[0];
+                        downloadObject(treeNode);
+                    },
+                    icon: 'glyphicon glyphicon-cloud-download'
                 }
             };
             break;
@@ -188,12 +192,46 @@ function translateObject(node) {
             $("#forgeViewer").html('Translation started! Please try again in a moment.');
         },
     });
-}ost({
-//        url: '/api/forge/modelderivative/jobs',
-//        contentType: 'application/json',
-//        data: JSON.stringify({ 'bucketKey': bucketKey, 'objectName': objectKey }),
-//        success: function (res) {
-//            $("#forgeViewer").html('Translation started! Please try again in a moment.');
-//        },
-//    });
-//}
+}
+
+
+
+function downloadObject(node) {
+    $("#forgeViewer").empty();
+    if (node == null) node = $('#appBuckets').jstree(true).get_selected(true)[0];
+    var bucketKey = node.parents[0];
+    var objectKey = node.id;
+    //let urn = objectKey;
+    console.log(node);
+
+
+    //let token = getForgeToken(function (access_token) {
+    //    jQuery.ajax({
+    //        url: 'https://developer.api.autodesk.com/modelderivative/v2/designdata/' + urn + '/manifest',
+    //        headers: { 'Authorization': 'Bearer ' + access_token },
+    //        success: function (res) {
+    //            if (res.progress === 'success' || res.progress === 'complete') launchViewer(urn);
+    //            else $("#forgeViewer").html('The translation job still running: ' + res.progress + '. Please try again in a moment.');
+    //        },
+    //        error: function (err) {
+    //            var msgButton = 'This file is not translated yet! ' +
+    //                '<button class="btn btn-xs btn-info" onclick="translateObject()"><span class="glyphicon glyphicon-eye-open"></span> ' +
+    //                'Start translation</button>'
+    //            $("#forgeViewer").html(msgButton);
+    //        }
+    //    });
+    //});
+
+    //alert(bucketKey + ' +++ ' + objectKey );
+
+    //let token = getForgeToken();
+    
+    jQuery.post({
+        url: '/api/forge/modelderivative/jobs/download',
+        contentType: 'application/json',
+        data: JSON.stringify({ 'bucketKey': bucketKey, 'objectName': objectKey }),
+        success: function (res) {
+            $("#forgeViewer").html('Translation started! Please try again in a moment.');
+        },
+    });
+}
