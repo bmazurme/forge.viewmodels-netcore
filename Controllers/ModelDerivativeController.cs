@@ -21,8 +21,6 @@ namespace forgeSample.Controllers
         }
 
 
-
-
         /// <summary>
         /// Start the translation job for a give bucketKey/objectName
         /// </summary>
@@ -53,15 +51,15 @@ namespace forgeSample.Controllers
             derivative.Configuration.AccessToken = oauth.access_token;
             dynamic jobPosted = await derivative.TranslateAsync(job);
             return jobPosted;
-         }
+        }
 
 
-            [HttpPost]
+        [HttpPost]
         [Route("api/forge/modelderivative/jobs/download")]
         public async void DownloadObject([FromBody] TranslateObjectModel objModel)
         {
             // get the access token
-            TwoLeggedApi oAuth = new TwoLeggedApi();
+            //TwoLeggedApi oAuth = new TwoLeggedApi();
             dynamic oauth = await OAuthController.GetInternalAsync();
             string AccessToken = oauth.access_token;
 
@@ -72,55 +70,63 @@ namespace forgeSample.Controllers
             //      new Scope[] { Scope.BucketRead, Scope.BucketCreate, Scope.DataRead, Scope.DataWrite })).ToObject<Bearer>();
             //        string AccessToken = token.AccessToken;
 
-
             string urn = objModel.objectName;
             var folderPath = _appEnvironment.WebRootPath;
 
+            //if (!string.IsNullOrEmpty(urn) && !string.IsNullOrEmpty(AccessToken))
+            //{
+            List<Derivatives.Resource> resourcesToDownload = await Derivatives.ExtractSVFAsync(urn, AccessToken);
+            IRestClient client = new RestClient("https://developer.api.autodesk.com/");
 
-            if (!string.IsNullOrEmpty(urn) && !string.IsNullOrEmpty(AccessToken))
+            foreach (Derivatives.Resource resource in resourcesToDownload)
             {
-                List<Derivatives.Resource> resourcesToDownload = await Derivatives.ExtractSVFAsync(urn, AccessToken);
-                IRestClient client = new RestClient("https://developer.api.autodesk.com/");
+                // prepare the GET to download the file
+                RestRequest request = new RestRequest(resource.RemotePath, Method.GET);
+                request.AddHeader("Authorization", "Bearer " + AccessToken);
+                request.AddHeader("Accept-Encoding", "gzip, deflate");
+                IRestResponse response = await client.ExecuteTaskAsync(request);
 
-                foreach (Derivatives.Resource resource in resourcesToDownload)
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 {
-                    // prepare the GET to download the file
-                    RestRequest request = new RestRequest(resource.RemotePath, Method.GET);
-                    request.AddHeader("Authorization", "Bearer " + AccessToken);
-                    request.AddHeader("Accept-Encoding", "gzip, deflate");
-                    IRestResponse response = await client.ExecuteTaskAsync(request);
+                    // something went wrong with this file...
+                    // MessageBox.Show(string.Format("Error downloading {0}: {1}",
+                    //  resource.FileName, response.StatusCode.ToString()));
 
-                    if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                    {
-                        // something went wrong with this file...
-                        // MessageBox.Show(string.Format("Error downloading {0}: {1}",
-                        //  resource.FileName, response.StatusCode.ToString()));
-
-                        // any other action?
-                    }
-                    else
-                    {
-                        string pathToSave = Path.Combine(folderPath, resource.LocalPath);
-                        Directory.CreateDirectory(Path.GetDirectoryName(pathToSave));
-                        System.IO.File.WriteAllBytes(pathToSave, response.RawBytes);
-                    }
+                    // any other action?
+                }
+                else
+                {
+                    string pathToSave = Path.Combine(folderPath, resource.LocalPath);
+                    Directory.CreateDirectory(Path.GetDirectoryName(pathToSave));
+                    System.IO.File.WriteAllBytes(pathToSave, response.RawBytes);
                 }
             }
-
-
-
-
-
-
-
+            //}
         }
 
 
+        [HttpDelete]
+        [Route("api/forge/modelderivative/jobs/delete")]
+        public async void DeleteObject([FromBody] TranslateObjectModel objModel)
+        {
+            ObjectsApi objects = new();
+            //dynamic token = await OAuthController.GetInternalAsync();
+            dynamic oauth = await OAuthController.GetInternalAsync();
+            string accessToken = oauth.access_token;
+            objects.Configuration.AccessToken = accessToken;
+            await objects.DeleteObjectAsync(objModel.bucketKey, objModel.objectName);
+        }
 
-
-
-
-
+        [HttpDelete]
+        [Route("api/forge/modelderivative/jobs/deletebucket")]
+        public async void DeleteBucket([FromBody] TranslateObjectModel objModel)
+        {
+            dynamic oauth = await OAuthController.GetInternalAsync();
+            BucketsApi buckets = new();
+            string accessToken = oauth.access_token;
+            buckets.Configuration.AccessToken = accessToken;
+            buckets.DeleteBucket(objModel.objectName);
+        }
 
 
 
@@ -138,9 +144,6 @@ namespace forgeSample.Controllers
             return Environment.GetEnvironmentVariable(settingKey).Trim();
         }
 
-
-
-
         /// <summary>
         /// Model for TranslateObject method
         /// </summary>
@@ -148,6 +151,7 @@ namespace forgeSample.Controllers
         {
             public string bucketKey { get; set; }
             public string objectName { get; set; }
+            //public string objectText { get; set; }
         }
     }
 }

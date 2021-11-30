@@ -3,14 +3,15 @@
   height: 100%;
 }
 
-.fill{
-  height: calc(100vh - 100px);
+.fill {
+    /*  height: calc(100vh - 100px);*/
+    height: calc(100vh - 100px);
 }
 
-body {
-  padding-top: 60px; /* space for the top nav bar */
-  margin-right: 30px;
-}
+/*body {
+    padding-top: 0;
+    margin-right: 30px;
+}*/
 
 #appBuckets {
   overflow: auto;
@@ -21,3 +22,5 @@ body {
 #forgeViewer {
   width: 100%;
 }
+
+
