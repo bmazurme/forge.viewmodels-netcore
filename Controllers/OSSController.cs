@@ -1,8 +1,10 @@
 ﻿using Autodesk.Forge;
+using Autodesk.Forge.Client;
 using Autodesk.Forge.Model;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -54,6 +56,11 @@ namespace forgeSample.Controllers
             return nodes;
         }
 
+        public class Parcel
+        {
+            public string bucketKey { get; set; }
+        }
+
         /// <summary>
         /// Model data for jsTree used on GetOSSAsync
         /// </summary>
@@ -83,9 +90,22 @@ namespace forgeSample.Controllers
             BucketsApi buckets = new BucketsApi();
             dynamic token = await OAuthController.GetInternalAsync();
             buckets.Configuration.AccessToken = token.access_token;
-            PostBucketsPayload bucketPayload = new PostBucketsPayload(string.Format("{0}-{1}", ClientId, bucket.bucketKey.ToLower()), null,
-              PostBucketsPayload.PolicyKeyEnum.Transient);
+            PostBucketsPayload bucketPayload = new PostBucketsPayload(string.Format("{0}-{1}",
+                ClientId, bucket.bucketKey.ToLower()), null, PostBucketsPayload.PolicyKeyEnum.Transient);
             return await buckets.CreateBucketAsync(bucketPayload, "US");
+        }
+
+        [HttpDelete]
+        [Route("api/forge/oss/buckets")]
+        public async void DeleteBucket([FromBody] Parcel parcel)
+        {
+
+            dynamic oauth = await OAuthController.GetInternalAsync();
+            BucketsApi buckets = new();
+
+            string accessToken = oauth.access_token;
+            buckets.Configuration.AccessToken = accessToken;
+            buckets.DeleteBucket(parcel.bucketKey);
         }
 
         /// <summary>

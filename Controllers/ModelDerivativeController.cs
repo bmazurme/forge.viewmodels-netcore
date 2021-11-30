@@ -117,16 +117,16 @@ namespace forgeSample.Controllers
             await objects.DeleteObjectAsync(objModel.bucketKey, objModel.objectName);
         }
 
-        [HttpDelete]
-        [Route("api/forge/modelderivative/jobs/deletebucket")]
-        public async void DeleteBucket([FromBody] TranslateObjectModel objModel)
-        {
-            dynamic oauth = await OAuthController.GetInternalAsync();
-            BucketsApi buckets = new();
-            string accessToken = oauth.access_token;
-            buckets.Configuration.AccessToken = accessToken;
-            buckets.DeleteBucket(objModel.objectName);
-        }
+        //[HttpDelete]
+        //[Route("api/forge/modelderivative/jobs/deletebucket")]
+        //public async void DeleteBucket([FromBody] TranslateObjectModel objModel)
+        //{
+        //    dynamic oauth = await OAuthController.GetInternalAsync();
+        //    BucketsApi buckets = new();
+        //    string accessToken = oauth.access_token;
+        //    buckets.Configuration.AccessToken = accessToken;
+        //    buckets.DeleteBucket(objModel.bucketKey);
+        //}
 
 
 

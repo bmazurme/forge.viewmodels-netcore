@@ -63,7 +63,7 @@ function createNewBucket() {
     var policyKey = $('#newBucketPolicyKey').val();
 
     console.log('bucketKey => ' + bucketKey);
-    console.log('policyKey => ' + policyKeys);
+    console.log('policyKey => ' + policyKey);
 
     jQuery.post({
         url: '/api/forge/oss/buckets',
@@ -150,7 +150,7 @@ function autodeskCustomMenu(autodeskNode) {
                     icon: 'glyphicon glyphicon-cloud-upload'
                 },
                 deleteBucket: {
-                    label: "Delete",
+                    label: "Delete bucket",
                     action: function () {
                         var treeNode = $('#appBuckets').jstree(true).get_selected(true)[0];
                         console.log(treeNode);
@@ -171,7 +171,7 @@ function autodeskCustomMenu(autodeskNode) {
                     icon: 'glyphicon glyphicon-eye-open'
                 },
                 downloadFile: {
-                    label: "Download",
+                    label: "Download file",
                     action: function () {
                         var treeNode = $('#appBuckets').jstree(true).get_selected(true)[0];
                         downloadObject(treeNode);
@@ -179,7 +179,7 @@ function autodeskCustomMenu(autodeskNode) {
                     icon: 'glyphicon glyphicon-cloud-download'
                 },
                 deleteFile: {
-                    label: "Delete",
+                    label: "Delete file",
                     action: function () {
                         var treeNode = $('#appBuckets').jstree(true).get_selected(true)[0];
                         deleteObject(treeNode);
@@ -232,28 +232,24 @@ function downloadObject(node) {
 
 function deleteBucket(node) {
     $("#forgeViewer").empty();
-    if (node == null) node = $('#appBuckets').jstree(true).get_selected(true)[0];
-    var bucketKey = node.parents[0];
-    var objectKey = node.id;
-    var objectText = node.text;
-    //console.log(node);
-    //console.log(bucketKey);
-    //console.log(objectText);
+    if (node == null) node = $('#appBuckets');//.jstree(true).get_selected(true);
+    
+    let key = encodeURIComponent(node.id)
 
-    if (confirm('Are you sure you want to delete this file?')) {
+    if (confirm('Are you sure you want to delete this bucket?')) {
         jQuery.post({
-            url: '/api/forge/modelderivative/jobs/deletebucket',
+        url: 'api/forge/oss/buckets',
             type: 'DELETE',
             contentType: 'application/json',
-            data: JSON.stringify({ 'bucketKey': bucketKey, 'objectName': objectText }),
+            data: JSON.stringify({ 'bucketKey': key }),
             success: function (res) {
+                $('#appBuckets').jstree(true).refresh();
                 $("#forgeViewer").html('Delete file started! Please try again in a moment.');
             },
         });
         console.log('This bucket was deleted.');
     } else {
-        // Do nothing!
-        console.log('File was not deleted.');
+        console.log('Bucket was not deleted.');
     }
 }
 
@@ -263,9 +259,6 @@ function deleteObject(node) {
     var bucketKey = node.parents[0];
     var objectKey = node.id;
     var objectText = node.text;
-    //console.log(node);
-    //console.log(bucketKey);
-    //console.log(objectText);
 
     if (confirm('Are you sure you want to delete this file?')) {
         jQuery.post({
@@ -279,14 +272,6 @@ function deleteObject(node) {
         });
         console.log('This file was deleted.');
     } else {
-        // Do nothing!
         console.log('File was not deleted.');
     }
-
-
-
-
-    
-
-    //$('#appBuckets').jstree(true).refresh();
 }

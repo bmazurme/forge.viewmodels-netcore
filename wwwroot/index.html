@@ -27,15 +27,13 @@
     <link href="css/footer.css" rel="stylesheet" />
     <link href="css/footer__copyright.css" rel="stylesheet" />
 
-
-
     <script src="js/ForgeTree8.js"></script>
     <script src="js/ForgeViewer.js"></script>
 </head>
 
 <body class="root">
     <header class="header">
-        <h1 class="header__title">Converter object to .svf</h1> 
+        <h1 class="header__title">{converter} object to .svf</h1> 
     </header>
     
     <!-- Fixed navbar by Bootstrap: https://getbootstrap.com/examples/navbar-fixed-top/ -->
@@ -92,7 +90,10 @@
                     </button>
                     <h4 class="modal-title" id="myModalLabel">Create new bucket</h4>
                 </div>
+
                 <div class="modal-body">
+   
+
                     <input type="text" id="newBucketKey" class="form-control"> For demonstration purposes, objects (files)
                     are NOT automatically translated. After you upload, right click on
                     the object and select "Translate". Note: Technically your bucket name is required to be globally unique across
@@ -100,9 +101,12 @@
                     your bucket name and in turn masked by the UI so you only have to make sure your bucket name is unique within
                     your current Forge app.
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="createNewBucket">Go ahead, create the bucket</button>
+                    <button type="button"
+                            class="btn btn-primary"
+                            id="createNewBucket">Go ahead, create the bucket</button>
                 </div>
             </div>
         </div>
