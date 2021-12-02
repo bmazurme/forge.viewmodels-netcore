@@ -12,4 +12,34 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="wwwroot\blocks\" />
+    <Content Remove="wwwroot\pages\" />
+    <Content Remove="wwwroot\vendor\" />
+    <Content Remove="wwwroot\blocks\root\" />
+    <Content Remove="wwwroot\blocks\footer\" />
+    <Content Remove="wwwroot\blocks\header\" />
+    <Content Remove="wwwroot\blocks\header\__title\" />
+    <Content Remove="wwwroot\blocks\footer\__copyright\" />
+    <Content Remove="wwwroot\blocks\#forgeViewer\" />
+    <Content Remove="wwwroot\blocks\fill\" />
+    <Content Remove="wwwroot\blocks\buckets\" />
+    <Content Remove="wwwroot\blocks\footer\__image\" />
+    <Content Remove="wwwroot\blocks\container\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\blocks\" />
+    <Folder Include="wwwroot\pages\" />
+    <Folder Include="wwwroot\vendor\" />
+    <Folder Include="wwwroot\blocks\root\" />
+    <Folder Include="wwwroot\blocks\footer\" />
+    <Folder Include="wwwroot\blocks\header\" />
+    <Folder Include="wwwroot\blocks\header\__title\" />
+    <Folder Include="wwwroot\blocks\footer\__copyright\" />
+    <Folder Include="wwwroot\blocks\viewer\" />
+    <Folder Include="wwwroot\blocks\fill\" />
+    <Folder Include="wwwroot\blocks\buckets\" />
+    <Folder Include="wwwroot\blocks\footer\__image\" />
+    <Folder Include="wwwroot\blocks\container\" />
+  </ItemGroup>
 </Project>

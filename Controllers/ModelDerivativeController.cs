@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using RestSharp;
 using System;
 using Microsoft.AspNetCore.Hosting;
+using System.Globalization;
 
 namespace forgeSample.Controllers
 {
@@ -45,14 +46,12 @@ namespace forgeSample.Controllers
             };
             JobPayload job;
             job = new JobPayload(new JobPayloadInput(objModel.objectName), new JobPayloadOutput(outputs));
-
             // start the translation
             DerivativesApi derivative = new DerivativesApi();
             derivative.Configuration.AccessToken = oauth.access_token;
             dynamic jobPosted = await derivative.TranslateAsync(job);
             return jobPosted;
         }
-
 
         [HttpPost]
         [Route("api/forge/modelderivative/jobs/download")]
@@ -62,19 +61,13 @@ namespace forgeSample.Controllers
             //TwoLeggedApi oAuth = new TwoLeggedApi();
             dynamic oauth = await OAuthController.GetInternalAsync();
             string AccessToken = oauth.access_token;
-
-            //Bearer token = (await oAuth.AuthenticateAsync(
-            //  GetAppSetting("FORGE_CLIENT_ID"),
-            //  GetAppSetting("FORGE_CLIENT_SECRET"),
-            //      oAuthConstants.CLIENT_CREDENTIALS,
-            //      new Scope[] { Scope.BucketRead, Scope.BucketCreate, Scope.DataRead, Scope.DataWrite })).ToObject<Bearer>();
-            //        string AccessToken = token.AccessToken;
-
+            DateTime localDate = DateTime.Now;
+            DateTime utcDate = DateTime.UtcNow;
+            var culture = new CultureInfo("ru-RU");
             string urn = objModel.objectName;
-            var folderPath = _appEnvironment.WebRootPath;
+            var folderPath = _appEnvironment.WebRootPath
+                + string.Format(@"\download\{0}", localDate.ToString(culture), localDate.Kind);
 
-            //if (!string.IsNullOrEmpty(urn) && !string.IsNullOrEmpty(AccessToken))
-            //{
             List<Derivatives.Resource> resourcesToDownload = await Derivatives.ExtractSVFAsync(urn, AccessToken);
             IRestClient client = new RestClient("https://developer.api.autodesk.com/");
 
@@ -101,7 +94,6 @@ namespace forgeSample.Controllers
                     System.IO.File.WriteAllBytes(pathToSave, response.RawBytes);
                 }
             }
-            //}
         }
 
 
@@ -110,31 +102,11 @@ namespace forgeSample.Controllers
         public async void DeleteObject([FromBody] TranslateObjectModel objModel)
         {
             ObjectsApi objects = new();
-            //dynamic token = await OAuthController.GetInternalAsync();
             dynamic oauth = await OAuthController.GetInternalAsync();
             string accessToken = oauth.access_token;
             objects.Configuration.AccessToken = accessToken;
             await objects.DeleteObjectAsync(objModel.bucketKey, objModel.objectName);
         }
-
-        //[HttpDelete]
-        //[Route("api/forge/modelderivative/jobs/deletebucket")]
-        //public async void DeleteBucket([FromBody] TranslateObjectModel objModel)
-        //{
-        //    dynamic oauth = await OAuthController.GetInternalAsync();
-        //    BucketsApi buckets = new();
-        //    string accessToken = oauth.access_token;
-        //    buckets.Configuration.AccessToken = accessToken;
-        //    buckets.DeleteBucket(objModel.bucketKey);
-        //}
-
-
-
-
-
-
-
-
 
         /// <summary>
         /// Reads appsettings from web.config

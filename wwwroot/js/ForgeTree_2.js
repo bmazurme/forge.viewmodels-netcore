@@ -30,7 +30,6 @@ $(document).ready(function () {
         $("#newBucketKey").focus();
     });
 
-
     $('#hiddenUploadField').change(function () {
         var node = $('#appBuckets').jstree(true).get_selected(true)[0];
         var _this = this;
@@ -260,6 +259,14 @@ function deleteObject(node) {
     var objectKey = node.id;
     var objectText = node.text;
 
+
+
+
+
+
+
+
+
     if (confirm('Are you sure you want to delete this file?')) {
         jQuery.post({
             url: '/api/forge/modelderivative/jobs/delete',
@@ -267,7 +274,8 @@ function deleteObject(node) {
             contentType: 'application/json',
             data: JSON.stringify({ 'bucketKey': bucketKey, 'objectName': objectText}),
             success: function (res) {
-                $("#forgeViewer").html('Delete file started! Please try again in a moment.');
+                $('#appBuckets').jstree(true).refresh();
+                //$("#forgeViewer").html('Delete file started! Please try again in a moment.');
             },
         });
         console.log('This file was deleted.');
