@@ -211,7 +211,6 @@ function translateObject(node) {
     });
 }
 
-
 function downloadObject(node) {
     $("#forgeViewer").empty();
     if (node == null) node = $('#appBuckets').jstree(true).get_selected(true)[0];

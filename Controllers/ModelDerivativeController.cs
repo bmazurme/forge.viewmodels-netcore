@@ -65,8 +65,8 @@ namespace forgeSample.Controllers
             DateTime utcDate = DateTime.UtcNow;
             var culture = new CultureInfo("ru-RU");
             string urn = objModel.objectName;
-            var folderPath = _appEnvironment.WebRootPath
-                + string.Format(@"\download\{0}", localDate.ToString(culture), localDate.Kind);
+            var folderPath = _appEnvironment.WebRootPath;
+               // + string.Format(@"\download\{0}", localDate.ToString(culture), localDate.Kind);
 
             List<Derivatives.Resource> resourcesToDownload = await Derivatives.ExtractSVFAsync(urn, AccessToken);
             IRestClient client = new RestClient("https://developer.api.autodesk.com/");

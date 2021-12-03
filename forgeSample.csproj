@@ -28,16 +28,9 @@
     <Content Remove="wwwroot\blocks\container\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="wwwroot\blocks\" />
-    <Folder Include="wwwroot\pages\" />
     <Folder Include="wwwroot\vendor\" />
-    <Folder Include="wwwroot\blocks\root\" />
-    <Folder Include="wwwroot\blocks\footer\" />
-    <Folder Include="wwwroot\blocks\header\" />
-    <Folder Include="wwwroot\blocks\header\__title\" />
     <Folder Include="wwwroot\blocks\footer\__copyright\" />
     <Folder Include="wwwroot\blocks\viewer\" />
-    <Folder Include="wwwroot\blocks\fill\" />
     <Folder Include="wwwroot\blocks\buckets\" />
     <Folder Include="wwwroot\blocks\footer\__image\" />
     <Folder Include="wwwroot\blocks\container\" />
