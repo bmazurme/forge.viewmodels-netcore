@@ -116,19 +116,22 @@ namespace forgeSample.Controllers
             public string bucketKey { get; set; }
         }
 
+        private const int UPLOAD_CHUNK_SIZE = 2; // Mb
         /// <summary>
         /// Receive a file from the client and upload to the bucket
         /// </summary>
         /// <returns></returns>
         [HttpPost]
+        //[RequestFormLimits(MultipartBodyLengthLimit = 209715200)]
+        //[RequestSizeLimit(bytes:2000_000_000)]
         [Route("api/forge/oss/objects")]
         public async Task<dynamic> UploadObject([FromForm]UploadFile input)
         {
             // save the file on the server
             var fileSavePath = Path.Combine(_env.WebRootPath, Path.GetFileName(input.fileToUpload.FileName));
+
             using (var stream = new FileStream(fileSavePath, FileMode.Create))
                 await input.fileToUpload.CopyToAsync(stream);
-
 
             // get the bucket...
             dynamic oauth = await OAuthController.GetInternalAsync();
@@ -137,12 +140,15 @@ namespace forgeSample.Controllers
 
             // upload the file/object, which will create a new object
             dynamic uploadedObj;
+            // get file size
+            //long fileSize = (new FileInfo(fileSavePath)).Length;
             using (StreamReader streamReader = new StreamReader(fileSavePath))
             {
                 uploadedObj = await objects.UploadObjectAsync(input.bucketKey,
                        Path.GetFileName(input.fileToUpload.FileName), (int)streamReader.BaseStream.Length, streamReader.BaseStream,
                        "application/octet-stream");
             }
+            
 
             // cleanup
             System.IO.File.Delete(fileSavePath);
