@@ -31,6 +31,9 @@ $(document).ready(function () {
     });
 
     $('#hiddenUploadField').change(function () {
+
+        console.log('=>');
+
         var node = $('#appBuckets').jstree(true).get_selected(true)[0];
         var _this = this;
         if (_this.files.length == 0) return;
@@ -40,6 +43,8 @@ $(document).ready(function () {
                 var formData = new FormData();
                 formData.append('fileToUpload', file);
                 formData.append('bucketKey', node.id);
+
+                
 
                 $.ajax({
                     url: '/api/forge/oss/objects',

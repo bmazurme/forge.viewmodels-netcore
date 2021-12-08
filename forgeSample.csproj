@@ -26,6 +26,7 @@
     <Content Remove="wwwroot\blocks\buckets\" />
     <Content Remove="wwwroot\blocks\footer\__image\" />
     <Content Remove="wwwroot\blocks\container\" />
+    <Content Remove="wwwroot\blocks\header\__link\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\blocks\" />
@@ -41,5 +42,6 @@
     <Folder Include="wwwroot\blocks\buckets\" />
     <Folder Include="wwwroot\blocks\footer\__image\" />
     <Folder Include="wwwroot\blocks\container\" />
+    <Folder Include="wwwroot\blocks\header\__link\" />
   </ItemGroup>
 </Project>

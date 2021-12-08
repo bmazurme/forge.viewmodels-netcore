@@ -21,7 +21,6 @@ namespace forgeSample.Controllers
             _appEnvironment = appEnvironment;
         }
 
-
         /// <summary>
         /// Start the translation job for a give bucketKey/objectName
         /// </summary>
@@ -58,15 +57,14 @@ namespace forgeSample.Controllers
         public async void DownloadObject([FromBody] TranslateObjectModel objModel)
         {
             // get the access token
-            //TwoLeggedApi oAuth = new TwoLeggedApi();
             dynamic oauth = await OAuthController.GetInternalAsync();
             string AccessToken = oauth.access_token;
             DateTime localDate = DateTime.Now;
-            DateTime utcDate = DateTime.UtcNow;
             var culture = new CultureInfo("ru-RU");
             string urn = objModel.objectName;
-            var folderPath = _appEnvironment.WebRootPath
-                + string.Format(@"\download\{0}", localDate.ToString(culture), localDate.Kind);
+            string[] paths = { _appEnvironment.WebRootPath, "downloads",
+                string.Format(localDate.ToString(culture), localDate.Kind).Replace('/','_').Replace(' ','_') };
+            string folderPath = Path.Combine(paths);
 
             List<Derivatives.Resource> resourcesToDownload = await Derivatives.ExtractSVFAsync(urn, AccessToken);
             IRestClient client = new RestClient("https://developer.api.autodesk.com/");
