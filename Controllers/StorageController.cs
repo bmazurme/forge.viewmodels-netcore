@@ -23,12 +23,9 @@ namespace forgeSample.Controllers
         {
             string[] paths = { _appEnvironment.WebRootPath, "downloads" };
             string rootPath = Path.Combine(paths);
+
             string[] allfolders = Directory.GetDirectories(rootPath);
 
-            //foreach (string folder in allfolders)
-            //{
-            //    Console.WriteLine(folder);
-            //}
 
             return allfolders;// new string[] { "value1", "value2" };
         }

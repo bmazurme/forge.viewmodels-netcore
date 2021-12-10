@@ -36,5 +36,6 @@
     <Folder Include="wwwroot\blocks\footer\__image\" />
     <Folder Include="wwwroot\blocks\container\" />
     <Folder Include="wwwroot\blocks\header\__link\" />
+    <Folder Include="wwwroot\downloads\" />
   </ItemGroup>
 </Project>

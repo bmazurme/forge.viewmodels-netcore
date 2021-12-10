@@ -30,10 +30,16 @@ $(document).ready(function () {
         $("#newBucketKey").focus();
     });
 
+    $('#deleteBucket').click(function () {
+        deleteBucket();
+    });
+
+    $('#deleteFile').click(function () {
+        deleteFile();
+    });
+
+
     $('#hiddenUploadField').change(function () {
-
-        console.log('=>');
-
         var node = $('#appBuckets').jstree(true).get_selected(true)[0];
         var _this = this;
         if (_this.files.length == 0) return;
@@ -42,9 +48,7 @@ $(document).ready(function () {
             case 'bucket':
                 var formData = new FormData();
                 formData.append('fileToUpload', file);
-                formData.append('bucketKey', node.id);
-
-                
+                formData.append('bucketKey', node.id);               
 
                 $.ajax({
                     url: '/api/forge/oss/objects',
@@ -142,7 +146,6 @@ function prepareAppBucketTree() {
 
 function autodeskCustomMenu(autodeskNode) {
     var items;
-
     switch (autodeskNode.type) {
         case "bucket":
             items = {
@@ -153,12 +156,12 @@ function autodeskCustomMenu(autodeskNode) {
                     },
                     icon: 'glyphicon glyphicon-cloud-upload'
                 },
-                deleteBucket: {
+                deleteBucketModal: {
                     label: "Delete bucket",
                     action: function () {
                         var treeNode = $('#appBuckets').jstree(true).get_selected(true)[0];
                         console.log(treeNode);
-                        deleteBucket(treeNode);
+                        deleteBucketModal(treeNode);
                     },
                     icon: 'glyphicon glyphicon-remove'
                 }
@@ -182,23 +185,18 @@ function autodeskCustomMenu(autodeskNode) {
                     },
                     icon: 'glyphicon glyphicon-cloud-download'
                 },
-                deleteFile: {
+                deleteFileModal: {
                     label: "Delete file",
                     action: function () {
                         var treeNode = $('#appBuckets').jstree(true).get_selected(true)[0];
-                        deleteObject(treeNode);
+                        deleteFileModal(treeNode);
                     },
                     icon: 'glyphicon glyphicon-remove'
                 }
             };
-            break;
+        break;
     }
-
     return items;
-}
-
-function uploadFile() {
-    $('#hiddenUploadField').click();
 }
 
 function translateObject(node) {
@@ -235,55 +233,49 @@ function downloadObject(node) {
 
 function deleteBucket(node) {
     $("#forgeViewer").empty();
-    if (node == null) node = $('#appBuckets');//.jstree(true).get_selected(true);
-    
-    let key = encodeURIComponent(node.id)
-
-    if (confirm('Are you sure you want to delete this bucket?')) {
-        jQuery.post({
-        url: 'api/forge/oss/buckets',
-            type: 'DELETE',
-            contentType: 'application/json',
-            data: JSON.stringify({ 'bucketKey': key }),
-            success: function (res) {
-                $('#appBuckets').jstree(true).refresh();
-                $("#forgeViewer").html('Delete file started! Please try again in a moment.');
-            },
-        });
-        console.log('This bucket was deleted.');
-    } else {
-        console.log('Bucket was not deleted.');
-    }
+    node = $('#appBuckets').jstree(true).get_selected(true)[0];
+    let key = encodeURIComponent(node.id);
+    jQuery.post({
+    url: 'api/forge/oss/buckets',
+        type: 'DELETE',
+        contentType: 'application/json',
+        data: JSON.stringify({ 'bucketKey': key }),
+        success: function (res) {
+            $('#appBuckets').jstree(true).refresh();
+            $("#forgeViewer").html('Delete file started! Please try again in a moment.');
+            $('#deleteBucketModal').modal('toggle');
+            console.log('This bucket was deleted.');
+        },
+    });
 }
 
-function deleteObject(node) {
+function uploadFile() {
+    $('#hiddenUploadField').click();
+}
+
+function deleteBucketModal(node) {
+    $('#deleteBucketModal').modal('toggle');
+}
+
+function deleteFileModal(node) {
+    $('#deleteFileModal').modal('toggle');
+}
+
+function deleteFile(node) {
     $("#forgeViewer").empty();
     if (node == null) node = $('#appBuckets').jstree(true).get_selected(true)[0];
     var bucketKey = node.parents[0];
-    var objectKey = node.id;
     var objectText = node.text;
 
-
-
-
-
-
-
-
-
-    if (confirm('Are you sure you want to delete this file?')) {
-        jQuery.post({
-            url: '/api/forge/modelderivative/jobs/delete',
-            type: 'DELETE',
-            contentType: 'application/json',
-            data: JSON.stringify({ 'bucketKey': bucketKey, 'objectName': objectText}),
-            success: function (res) {
-                $('#appBuckets').jstree(true).refresh();
-                //$("#forgeViewer").html('Delete file started! Please try again in a moment.');
-            },
-        });
-        console.log('This file was deleted.');
-    } else {
-        console.log('File was not deleted.');
-    }
+    jQuery.post({
+        url: '/api/forge/modelderivative/jobs/delete',
+        type: 'DELETE',
+        contentType: 'application/json',
+        data: JSON.stringify({ 'bucketKey': bucketKey, 'objectName': objectText}),
+        success: function (res) {
+            $('#appBuckets').jstree(true).refresh();
+            $('#deleteFileModal').modal('toggle');
+        },
+    });
+    console.log('This file was deleted.');
 }
