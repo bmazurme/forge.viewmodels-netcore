@@ -17,7 +17,15 @@
 /////////////////////////////////////////////////////////////////////
 
 
-
+//Autodesk.Viewing.Initializer(options, function onInitialized() {
+//    viewerApp = new Autodesk.Viewing.ViewingApplication('MyViewerDiv');
+//    var config3d = {
+//        extensions: ['WharfExtension']
+//    };
+//    viewerApp.registerViewer(viewerApp.k3D, Autodesk.Viewing.Private.GuiViewer3D, config3d);
+//    var model = 'urn:' + defaultModel;
+//    viewerApp.loadDocument(model, onDocumentLoadSuccess, onDocumentLoadFailure);
+//});
 
 
 var viewer;
@@ -29,7 +37,23 @@ function launchViewer(urn) {
   };
 
   Autodesk.Viewing.Initializer(options, () => {
-    viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'));
+    var htmlDiv = document.getElementById('forgeViewer');
+    Autodesk.Viewing.theExtensionManager.registerExtension('MyAwesomeExtension', MyAwesomeExtension);
+    Autodesk.Viewing.theExtensionManager.registerExtension('ToolbarExtension', ToolbarExtension);
+      Autodesk.Viewing.theExtensionManager.registerExtension('EventsTutorialExtension', EventsTutorialExtension);
+    var config3d = {
+        extensions: ['MyAwesomeExtension', 'ToolbarExtension', 'EventsTutorialExtension'],
+    };  
+    viewer = new Autodesk.Viewing.GuiViewer3D(htmlDiv, config3d);
+
+
+
+
+      //viewer.start();
+      //viewer.loadModel(...);
+
+
+
     viewer.start();
     var documentId = 'urn:' + urn;
     Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
@@ -55,3 +79,5 @@ function getForgeToken(callback) {
     });
   });
 }
+
+

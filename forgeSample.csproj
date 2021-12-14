@@ -28,8 +28,118 @@
     <Content Remove="wwwroot\blocks\container\" />
     <Content Remove="wwwroot\blocks\header\__link\" />
   </ItemGroup>
+
   <ItemGroup>
-    <Folder Include="wwwroot\vendor\" />
+    <None Remove="Views\blocks\buckets\buckets.css" />
+    <None Remove="Views\blocks\container\container.css" />
+    <None Remove="Views\blocks\fill\fill.css" />
+    <None Remove="Views\blocks\footer\footer.css" />
+    <None Remove="Views\blocks\footer\__copyright\footer__copyright.css" />
+    <None Remove="Views\blocks\footer\__image\footer__image.css" />
+    <None Remove="Views\blocks\header\header.css" />
+    <None Remove="Views\blocks\header\__link\header__link.css" />
+    <None Remove="Views\blocks\header\__title\header__title.css" />
+    <None Remove="Views\blocks\root\root.css" />
+    <None Remove="Views\blocks\viewer\viewer.css" />
+    <None Remove="Views\pages\storage.css" />
+    <None Remove="Views\vendor\fonts.css" />
+    <None Remove="Views\vendor\InterWeb\.DS_Store" />
+    <None Remove="Views\vendor\InterWeb\Inter-Black.woff" />
+    <None Remove="Views\vendor\InterWeb\Inter-Black.woff2" />
+    <None Remove="Views\vendor\InterWeb\Inter-Medium.woff" />
+    <None Remove="Views\vendor\InterWeb\Inter-Medium.woff2" />
+    <None Remove="Views\vendor\InterWeb\Inter-Regular.woff" />
+    <None Remove="Views\vendor\InterWeb\Inter-Regular.woff2" />
+    <None Remove="Views\vendor\normalize.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Views\blocks\buckets\buckets.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\blocks\container\container.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\blocks\fill\fill.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\blocks\footer\footer.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\blocks\footer\__copyright\footer__copyright.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\blocks\footer\__image\footer__image.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\blocks\header\header.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\blocks\header\__link\header__link.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\blocks\header\__title\header__title.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\blocks\root\root.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\blocks\viewer\viewer.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\pages\storage.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\vendor\fonts.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\vendor\InterWeb\.DS_Store">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\vendor\InterWeb\Inter-Black.woff">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\vendor\InterWeb\Inter-Black.woff2">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\vendor\InterWeb\Inter-Medium.woff">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\vendor\InterWeb\Inter-Medium.woff2">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\vendor\InterWeb\Inter-Regular.woff">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\vendor\InterWeb\Inter-Regular.woff2">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\vendor\normalize.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="wwwroot\blocks\footer\__copyright\" />
     <Folder Include="wwwroot\blocks\viewer\" />
     <Folder Include="wwwroot\blocks\buckets\" />
