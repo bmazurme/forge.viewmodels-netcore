@@ -27,7 +27,6 @@
 //    viewerApp.loadDocument(model, onDocumentLoadSuccess, onDocumentLoadFailure);
 //});
 
-
 var viewer;
 
 function launchViewer(urn) {
@@ -40,29 +39,28 @@ function launchViewer(urn) {
     var htmlDiv = document.getElementById('forgeViewer');
     Autodesk.Viewing.theExtensionManager.registerExtension('MyAwesomeExtension', MyAwesomeExtension);
     Autodesk.Viewing.theExtensionManager.registerExtension('ToolbarExtension', ToolbarExtension);
-      Autodesk.Viewing.theExtensionManager.registerExtension('EventsTutorialExtension', EventsTutorialExtension);
+    Autodesk.Viewing.theExtensionManager.registerExtension('EventsTutorialExtension', EventsTutorialExtension);
     var config3d = {
         extensions: ['MyAwesomeExtension', 'ToolbarExtension', 'EventsTutorialExtension'],
     };  
     viewer = new Autodesk.Viewing.GuiViewer3D(htmlDiv, config3d);
 
-
-
-
       //viewer.start();
       //viewer.loadModel(...);
 
-
-
     viewer.start();
-    var documentId = 'urn:' + urn;
+      var documentId = 'urn:' + urn;
+
+      //console.log(documentId);
+
     Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
   });
 }
 
 function onDocumentLoadSuccess(doc) {
   var viewables = doc.getRoot().getDefaultGeometry();
-  viewer.loadDocumentNode(doc, viewables).then(i => {
+    viewer.loadDocumentNode(doc, viewables).then(i => {
+    // console.log(doc);
     // documented loaded, any action?
   });
 }
@@ -72,12 +70,9 @@ function onDocumentLoadFailure(viewerErrorCode) {
 }
 
 function getForgeToken(callback) {
-
   fetch('/api/forge/oauth/token').then(res => {
     res.json().then(data => {
       callback(data.access_token, data.expires_in);
     });
   });
 }
-
-

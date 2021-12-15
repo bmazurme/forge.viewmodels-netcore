@@ -36,9 +36,37 @@ ToolbarExtension.prototype.onToolbarCreated = function (toolbar) {
     };
     button2.addClass('button__hide-env-bg');
     button2.setToolTip('Hide Environment');
+    // Button 3
+    var button3 = new Autodesk.Viewing.UI.Button('button__export');
+    button3.onClick = function (e) {
+        let msg;
+        var instanceTree = viewer.model.getData().instanceTree;
+        var allDbIdsStr = Object.keys(instanceTree.nodeAccess.dbIdToIndex);
+        var AllDbIds = allDbIdsStr.map(function (id) { return parseInt(id) });
+
+        viewer.model.getBulkProperties(AllDbIds, null,
+            function (elements) {
+                //console.log(elements);
+                elements.forEach(item => {
+                    item.properties.forEach(pr => {
+                        msg += pr.displayName + ' : ' + pr.displayValue + '\n';
+                    });
+                    //console.log(item.displayName + ' : ' + item.displayValue + '\n');
+                    //msg += item.displayName + ' : ' + item.displayValue + '\n';
+                });
+                console.log(msg);
+                //alert(msg);
+            });
+
+
+    };
+    button3.addClass('button__export');
+    button3.setToolTip('Export data');
+
     // SubToolbar
     this.subToolbar = new Autodesk.Viewing.UI.ControlGroup('my-custom-toolbar');
     this.subToolbar.addControl(button1);
     this.subToolbar.addControl(button2);
+    this.subToolbar.addControl(button3);
     toolbar.addControl(this.subToolbar);
 };
