@@ -1,0 +1,12 @@
+﻿.menu {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    z-index: 5;
+    margin: 0.5em;
+    padding: 0.5em;
+    font-size: 1em;
+    font-family: sans-serif;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 6px;
+}

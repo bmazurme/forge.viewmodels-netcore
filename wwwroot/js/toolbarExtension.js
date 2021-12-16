@@ -11,7 +11,7 @@ ToolbarExtension.prototype.constructor = ToolbarExtension;
 ToolbarExtension.prototype.load = function () {
     // Set background environment to "Infinity Pool"
     // and make sure the environment background texture is visible
-    this.viewer.setLightPreset(2);
+    this.viewer.setLightPreset(0);
     this.viewer.setEnvMapBackground(true);
     // Ensure the model is centered
     this.viewer.fitToView();
@@ -46,27 +46,62 @@ ToolbarExtension.prototype.onToolbarCreated = function (toolbar) {
 
         viewer.model.getBulkProperties(AllDbIds, null,
             function (elements) {
-                //console.log(elements);
                 elements.forEach(item => {
+                    console.log(item);
                     item.properties.forEach(pr => {
-                        msg += pr.displayName + ' : ' + pr.displayValue + '\n';
+                        if (pr.displayName.includes('entools') || pr.displayName.includes('Тип системы')) {
+                            msg += pr.displayName + ' : ' + pr.displayValue + '\n';
+                        }
                     });
-                    //console.log(item.displayName + ' : ' + item.displayValue + '\n');
-                    //msg += item.displayName + ' : ' + item.displayValue + '\n';
                 });
-                console.log(msg);
-                //alert(msg);
+                
+                download(msg, 'filename', 'txt');
             });
-
-
     };
+
     button3.addClass('button__export');
     button3.setToolTip('Export data');
+
+    let button4 = new Autodesk.Viewing.UI.Button('button__hide');
+    button4.onClick = function (e) {
+        //alert('!');
+        //var instanceTree = viewer.model.getData().instanceTree;
+        //var rootId = instanceTree.getRootId();
+        //viewer.hide(rootId);
+        ///var n = viewer.model.getData().instanceTree.nodeAccess.nodes[dbId];
+        viewer.impl.visibilityManager.setNodeOff(3298, true);
+
+       // getFragmentWorldMatrixByNodeId(nodeId);
+    };
+
+    button4.addClass('button__off');
+    button4.setToolTip('Node Off');
 
     // SubToolbar
     this.subToolbar = new Autodesk.Viewing.UI.ControlGroup('my-custom-toolbar');
     this.subToolbar.addControl(button1);
     this.subToolbar.addControl(button2);
     this.subToolbar.addControl(button3);
+    this.subToolbar.addControl(button4);
     toolbar.addControl(this.subToolbar);
 };
+
+
+function download(data, filename, type) {
+    var file = new Blob([data], { type: type });
+    if (window.navigator.msSaveOrOpenBlob) // IE10+
+        window.navigator.msSaveOrOpenBlob(file, filename);
+    else { // Others
+        var a = document.createElement("a"),
+            url = URL.createObjectURL(file);
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }, 0);
+    }
+}
+

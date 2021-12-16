@@ -17,16 +17,24 @@ EventsTutorialExtension.prototype.onSelectionEvent = function (event) {
     var allDbIdsStr = Object.keys(instanceTree.nodeAccess.dbIdToIndex);
     
     //console.log(allDbIdsStr.map(function (id) { return parseInt(id) }));
-    var AllDbIds = allDbIdsStr.map(function (id) { return parseInt(id) });//getAllDbIds(myViewer);
+    var AllDbIds = allDbIdsStr.map(function (id) {
+        return parseInt(id)
+    });//getAllDbIds(myViewer);
     viewer.model.getBulkProperties(AllDbIds, null,
         function (elements) {
-            //console.log(elements);//this includes all properties of a node.
+
+            console.log(elements);//this includes all properties of a node.
         });
     viewer.model.getBulkProperties(currSelection, null,
         function (elements) {
-            console.log(elements[0].properties);
+            //var node = viewer.model.getData()
+            //    .instanceTree.dbIdToNode[dbId];
+            //var dbId = node.dbId
+
+            //console.log(elements[0].properties);
             elements[0].properties.forEach(item =>
             {
+                console.log(item);
                 console.log(item.displayName + ' : ' + item.displayValue)
             });
             //console.log(element.displayCategory);
@@ -40,7 +48,6 @@ EventsTutorialExtension.prototype.onSelectionEvent = function (event) {
     //displayCategory: "__revit__"
     //displayName: "ElementId"
     //displayValue: "670285"
-
 
     //var alldbId = [];
     //if (!rootId) {
@@ -59,11 +66,8 @@ EventsTutorialExtension.prototype.onSelectionEvent = function (event) {
     //    });
     //}
 
-    
-
-
     var domElem = document.getElementById('MyToolValue');
-    domElem.innerText = this.viewer.getActiveNavigationTool();//event.id;
+    domElem.innerText = this.viewer.getActiveNavigationTool();
 };
 EventsTutorialExtension.prototype.load = function () {
     this.onSelectionBinded = this.onSelectionEvent.bind(this);
@@ -74,4 +78,27 @@ EventsTutorialExtension.prototype.unload = function () {
     this.viewer.removeEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.onSelectionBinded);
     this.onSelectionBinded = null;
     return true;
+};
+
+
+
+
+function getFragmentWorldMatrixByNodeId(nodeId) {
+    let result = {
+        fragId: [],
+        matrix: [],
+    };
+    let viewer = this.viewer;
+    this.tree.enumNodeFragments(nodeId, function (frag) {
+
+        let fragProxy = viewer.impl.getFragmentProxy(viewer.model, frag);
+        let matrix = new THREE.Matrix4();
+
+        fragProxy.getWorldMatrix(matrix);
+
+        result.fragId.push(frag);
+        result.matrix.push(matrix);
+    });
+    console.log(result);
+    //return result;
 };
