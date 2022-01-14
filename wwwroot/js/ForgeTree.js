@@ -44,6 +44,7 @@ $(document).ready(function () {
         var _this = this;
         if (_this.files.length == 0) return;
         var file = _this.files[0];
+
         switch (node.type) {
             case 'bucket':
                 var formData = new FormData();
@@ -160,7 +161,7 @@ function autodeskCustomMenu(autodeskNode) {
                     label: "Delete bucket",
                     action: function () {
                         var treeNode = $('#appBuckets').jstree(true).get_selected(true)[0];
-                        console.log(treeNode);
+                        //console.log(treeNode);
                         deleteBucketModal(treeNode);
                     },
                     icon: 'glyphicon glyphicon-remove'
@@ -219,7 +220,8 @@ function downloadObject(node) {
     if (node == null) node = $('#appBuckets').jstree(true).get_selected(true)[0];
     var bucketKey = node.parents[0];
     var objectKey = node.id;
-    console.log(node);
+
+    //console.log(node);
 
     jQuery.post({
         url: '/api/forge/modelderivative/jobs/download',

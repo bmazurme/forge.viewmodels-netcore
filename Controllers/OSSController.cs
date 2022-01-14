@@ -4,6 +4,7 @@ using Autodesk.Forge.Model;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -99,7 +100,6 @@ namespace forgeSample.Controllers
         [Route("api/forge/oss/buckets")]
         public async void DeleteBucket([FromBody] Parcel parcel)
         {
-
             dynamic oauth = await OAuthController.GetInternalAsync();
             BucketsApi buckets = new();
 
@@ -123,7 +123,8 @@ namespace forgeSample.Controllers
         /// <returns></returns>
         [HttpPost]
         //[RequestFormLimits(MultipartBodyLengthLimit = 209715200)]
-        //[RequestSizeLimit(bytes:2000_000_000)]
+        //[RequestSizeLimit(100_000_000)]
+        [DisableRequestSizeLimit]
         [Route("api/forge/oss/objects")]
         public async Task<dynamic> UploadObject([FromForm]UploadFile input)
         {
@@ -137,21 +138,32 @@ namespace forgeSample.Controllers
             dynamic oauth = await OAuthController.GetInternalAsync();
             ObjectsApi objects = new ObjectsApi();
             objects.Configuration.AccessToken = oauth.access_token;
-
             // upload the file/object, which will create a new object
             dynamic uploadedObj;
-            // get file size
-            //long fileSize = (new FileInfo(fileSavePath)).Length;
-            using (StreamReader streamReader = new StreamReader(fileSavePath))
-            {
-                uploadedObj = await objects.UploadObjectAsync(input.bucketKey,
-                       Path.GetFileName(input.fileToUpload.FileName), (int)streamReader.BaseStream.Length, streamReader.BaseStream,
-                       "application/octet-stream");
-            }
-            
 
-            // cleanup
-            System.IO.File.Delete(fileSavePath);
+
+
+
+
+                // get file size
+                // long fileSize = (new FileInfo(fileSavePath)).Length;
+                using (StreamReader streamReader = new StreamReader(fileSavePath))
+                {
+                    uploadedObj = await objects.UploadObjectAsync(input.bucketKey,
+                           Path.GetFileName(input.fileToUpload.FileName),
+                           (int)streamReader.BaseStream.Length, streamReader.BaseStream,
+                           "application/octet-stream");
+                }
+
+
+                // cleanup
+                System.IO.File.Delete(fileSavePath);
+
+
+
+
+
+
 
             return uploadedObj;
         }

@@ -1,7 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>8180503a-e54e-41da-bee9-fe7d6726adcb</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -9,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Autodesk.Forge" Version="1.6.0" />
+    <PackageReference Include="Autodesk.Forge.DesignAutomation" Version="4.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
   </ItemGroup>
 
@@ -148,4 +150,5 @@
     <Folder Include="wwwroot\blocks\header\__link\" />
     <Folder Include="wwwroot\downloads\" />
   </ItemGroup>
+  <ProjectExtensions><VisualStudio><UserProperties properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

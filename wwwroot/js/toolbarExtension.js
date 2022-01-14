@@ -6,6 +6,9 @@
 function ToolbarExtension(viewer, options) {
     Autodesk.Viewing.Extension.call(this, viewer, options);
 }
+
+//oolbarExtension.startCreateItem({ label: 'New', status: 'open', type: 'issues' });
+
 ToolbarExtension.prototype = Object.create(Autodesk.Viewing.Extension.prototype);
 ToolbarExtension.prototype.constructor = ToolbarExtension;
 ToolbarExtension.prototype.load = function () {

@@ -4,11 +4,94 @@
 EventsTutorialExtension.prototype = Object.create(Autodesk.Viewing.Extension.prototype);
 EventsTutorialExtension.prototype.constructor = EventsTutorialExtension;
 EventsTutorialExtension.prototype.onSelectionEvent = function (event) {
+
+    //let delta = viewer.model.getData().globalOffset;
+    var instanceTree = viewer.model.getData().instanceTree;
+    let selectedNode = event.nodeArray[0];
+    let transMat = getFragmentWorldMatrixByNodeId(selectedNode, viewer).matrix[0];
+    console.log(getFragmentWorldMatrixByNodeId(selectedNode, viewer));
+    //console.log(transMat.matrix[0]);
+    //let nodeDataposition;
+    //let selectedNode = event.nodeArray[0];
+    let nodeDataID = selectedNode;
+    let nodeDataName = viewer.model.getData().instanceTree.getNodeName(selectedNode);
+    let nodeDataParent = viewer.model.getData().instanceTree.getNodeParentId(selectedNode);
+    //let transMat = getFragmentWorldMatrixByNodeId(event.nodeArray[0]).matrix[0];
+
+    // continue if it has transformation Matrix (meaning it is not a "group node")
+    //if (transMat) {
+    //    nodeDataposition = transMat.getPosition();
+    //    console.log(nodeDataposition);
+    //} else {
+    //    nodeDataposition = new THREE.Vector3();
+    //    //console.log(nodeDataposition);
+    //}
+    //console.log(nodeData);
+    //console.log(nodeDataName);
+    //console.log(nodeDataParent);
+    //console.log(nodeDataID);
+    //console.log(nodeDataposition.x);
+    //console.log(nodeDataposition.y);
+    //console.log(nodeDataposition.z);
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //var issue = PushPinExtensionHandle.getItemById('0');
+    //console.log(issue);
+    
+
+
+
+
+
+    //let transMat = this.getFragmentWorldMatrixByNodeId(event.nodeArray[0]).matrix[0];
+    //console.log(selectedNode);
+    //console.log(viewer.model.getData().instanceTree.getNodeName(selectedNode));
+    //getFragmentWorldMatrixByNodeId(selectedNode)
+
+    
+    //console.log(transMat);
+
+    //var allDbIdsStr = Object.keys(instanceTree.nodeAccess.dbIdToIndex);
+    //var dbId = allDbIdsStr.map(function (id) { return parseInt(id) });
+    ////var instanceTree = model.getData().instanceTree
+
+    //var fragIds = []
+
+    //instanceTree.enumNodeFragments(dbId, function (fragId) {
+    //    fragIds.push(fragId)
+    //})
+
+    //// to change material or transform, need to iterate all
+    //// fragments of a given dbId and apply same material/transform
+
+    //fragIds.forEach(function (fragId) {
+    //    var renderProxy = viewer.impl.getRenderProxy(viewer.model, fragId);
+    //    var fragmentproxy = viewer.impl.getFragmentProxy(viewer.model, fragId);
+
+    //    console.log(renderProxy);
+    //    console.log(fragmentproxy);
+    //})
+
+
+
+
+
     var currSelection = this.viewer.getSelection();
     var domElem = document.getElementById('MySelectionValue');
     domElem.innerText = currSelection.length;
 
-    var instanceTree = viewer.model.getData().instanceTree;
+   
     //let rootId = instanceTree.getRootId();
     //console.log(instanceTree);
     //console.log(currSelection[0]);
@@ -20,11 +103,12 @@ EventsTutorialExtension.prototype.onSelectionEvent = function (event) {
     var AllDbIds = allDbIdsStr.map(function (id) {
         return parseInt(id)
     });//getAllDbIds(myViewer);
-    viewer.model.getBulkProperties(AllDbIds, null,
-        function (elements) {
+        viewer.model.getBulkProperties(AllDbIds, null,
+            function (elements) {
 
-            console.log(elements);//this includes all properties of a node.
-        });
+            //console.log(elements);//this includes all properties of a node.
+            });
+
     viewer.model.getBulkProperties(currSelection, null,
         function (elements) {
             //var node = viewer.model.getData()
@@ -34,8 +118,8 @@ EventsTutorialExtension.prototype.onSelectionEvent = function (event) {
             //console.log(elements[0].properties);
             elements[0].properties.forEach(item =>
             {
-                console.log(item);
-                console.log(item.displayName + ' : ' + item.displayValue)
+                //console.log(item);
+                //console.log(item.displayName + ' : ' + item.displayValue)
             });
             //console.log(element.displayCategory);
             //console.log(element.displayName);
@@ -44,6 +128,10 @@ EventsTutorialExtension.prototype.onSelectionEvent = function (event) {
             //console.log(elements[0].properties);//this includes all properties of a node.
             
         });
+
+
+
+
     //attributeName: "ElementId"
     //displayCategory: "__revit__"
     //displayName: "ElementId"
@@ -83,22 +171,20 @@ EventsTutorialExtension.prototype.unload = function () {
 
 
 
-function getFragmentWorldMatrixByNodeId(nodeId) {
+function getFragmentWorldMatrixByNodeId(nodeId, viewer) {
     let result = {
         fragId: [],
         matrix: [],
     };
-    let viewer = this.viewer;
-    this.tree.enumNodeFragments(nodeId, function (frag) {
 
+    viewer.model.getData().instanceTree.enumNodeFragments(nodeId, function (frag) {
         let fragProxy = viewer.impl.getFragmentProxy(viewer.model, frag);
         let matrix = new THREE.Matrix4();
-
         fragProxy.getWorldMatrix(matrix);
-
         result.fragId.push(frag);
         result.matrix.push(matrix);
     });
-    console.log(result);
-    //return result;
+    //console.log(result);
+    return result;
 };
+
